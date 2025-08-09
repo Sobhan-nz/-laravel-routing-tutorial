@@ -1,57 +1,57 @@
-# 📌 آموزش کامل Routing در Laravel
+# 📌 Complete Tutorial on Routing in Laravel
 
-## 1. تعریف Routing در لاراول
-در لاراول، **Route (مسیر)** مسئول تعیین اینه که وقتی یک کاربر به یک آدرس خاص (URL) درخواست میده، چه اتفاقی بیفته.  
+## 1. Definition of Routing in Laravel
+In Laravel, **Route** is responsible for determining what happens when a user requests a specific address (URL).
 
-> Routing پل ارتباطی بین **URL** که کاربر درخواست کرده و **منطق برنامه** (Controller, View, Closure Function) است.
+> Routing is the bridge between the **URL** that the user requested and the **application logic** (Controller, View, Closure Function).
 
-**مثال:**
+**Example:**
 ```
-کاربر → مرورگر → /about → Route → Controller یا View → پاسخ به کاربر
+User → Browser → /about → Route → Controller or View → Response to user
 ```
 
 ---
 
-## 2. محل تعریف Route‌ها
-فایل‌های اصلی مسیرها در پوشه `routes/`:
-- `web.php` → مخصوص درخواست‌های وب (دارای Session و CSRF)
-- `api.php` → مخصوص API‌ها (بدون Session)
-- `console.php` → مسیرهای کنسول (Artisan Commands)
-- `channels.php` → مسیرهای کانال برای Broadcast
+## 2. Route definition location
+Main route files in `routes/` folder:
+- `web.php` → For web requests (with Session and CSRF)
+- `api.php` → For APIs (without Session)
+- `console.php` → Console routes (Artisan Commands)
+- `channels.php` → Channel routes for Broadcast
 
 ---
 
-## 3. انواع تعریف Route
-### 3.1 مسیر ساده با Closure
+## 3. Types of Route Definition
+### 3.1 Simple route with Closure
 ```php
 Route::get('/about', function () {
-    return 'صفحه درباره ما';
+return 'About Us Page';
 });
 ```
 
-### 3.2 مسیر به یک View
+### 3.2 Route to a View
 ```php
 Route::get('/contact', function () {
-    return view('contact');
+return view('contact');
 });
 ```
 
-### 3.3 مسیر به یک Controller
+### 3.3 Route to a Controller
 ```php
 Route::get('/products', [ProductController::class, 'index']);
 ```
 
 ---
 
-## 4. متدهای HTTP در Route
-- **GET** → دریافت داده  
-- **POST** → ارسال داده  
-- **PUT/PATCH** → بروزرسانی داده  
-- **DELETE** → حذف داده  
-- **ANY** → هر متدی  
-- **MATCH** → چند متد خاص  
+## 4. HTTP Methods in Route
+- **GET** → Get Data
+- **POST** → Send Data
+- **PUT/PATCH** → Update Data
+- **DELETE** → Delete Data
+- **ANY** → Any Method
+- **MATCH** → Multiple Specific Methods
 
-مثال:
+Example:
 ```php
 Route::post('/form', [FormController::class, 'store']);
 Route::delete('/product/{id}', [ProductController::class, 'destroy']);
@@ -59,85 +59,85 @@ Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 
 ---
 
-## 5. پارامتر در Route
-### 5.1 اجباری
+## 5. Parameters in Route
+### 5.1 Required
 ```php
 Route::get('/user/{id}', function ($id) {
-    return "کاربر شماره: $id";
+return "User ID: $id";
 });
 ```
 
-### 5.2 اختیاری
+### 5.2 Optional
 ```php
 Route::get('/user/{name?}', function ($name = 'Guest') {
-    return "سلام $name";
+return "Hello $name";
 });
 ```
 
-### 5.3 اعتبارسنجی با Regex
+### 5.3 Validation with Regex
 ```php
 Route::get('/product/{id}', function ($id) {
-    return "محصول شماره $id";
+return "Product ID $id";
 })->where('id', '[0-9]+');
 ```
 
 ---
 
-## 6. نام‌گذاری Route
+## 6. Route Naming
 ```php
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 ```
-در Blade:
-```blade
-<a href="{{ route('dashboard') }}">داشبورد</a>
+In Blade:
+Blade
+<a href="{{ route('dashboard') }}">dashboard</a>
 ```
 
 ---
 
-## 7. گروه‌بندی Route‌ها
-### 7.1 با Prefix
+## 7. Route grouping
+### 7.1 with Prefix
 ```php
-Route::prefix('admin')->group(function () {
-    Route::get('/users', [AdminController::class, 'users']);
-    Route::get('/posts', [AdminController::class, 'posts']);
+Route::prefix('admin')->group(function () { 
+Route::get('/users', [AdminController::class, 'users']); 
+Route::get('/posts', [AdminController::class, 'posts']);
 });
 ```
 
-### 7.2 با Middleware
+### 7.2 with Middleware
 ```php
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [UserController::class, 'profile']);
-    Route::get('/settings', [UserController::class, 'settings']);
+Route::middleware(['auth'])->group(function () { 
+Route::get('/profile', [UserController::class, 'profile']); 
+Route::get('/settings', [UserController::class, 'settings']);
 });
 ```
 
 ---
 
-## 8. Route Resource (CRUD سریع)
+## 8. Route Resource (Fast CRUD)
 ```php
 Route::resource('products', ProductController::class);
 ```
-مسیرهای زیر ساخته می‌شوند:
-- index  
-- create  
-- store  
-- show  
-- edit  
-- update  
-- destroy  
+The following routes are created:
+- index
+- create
+- store
+- show
+- edit
+- update
+- destroy
 
 ---
 
-## 9. Route Fallback (صفحه 404)
+## 9. Route Fallback (404 page)
 ```php
 Route::fallback(function () {
-    return view('errors.404');
+return view('errors.404');
 });
 ```
 
 ---
 
-## 10. کش کردن Route‌ها
+## 10. Caching Routes
 ```bash
 php artisan route:cache
 php artisan route:clear
@@ -145,5 +145,5 @@ php artisan route:clear
 
 ---
 
-## 📚 نتیجه‌گیری
-Routing یکی از مهم‌ترین بخش‌های لاراول است که مدیریت درخواست‌ها و پاسخ‌ها را بر عهده دارد. با استفاده درست از Route‌ها می‌توان یک ساختار تمیز، امن و قابل نگهداری ایجاد کرد.
+## 📚Conclusion
+Routing is one of the most important parts of Laravel that handles requests and responses. By using Routes properly, you can create a clean, secure, and maintainable structure.
